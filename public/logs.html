@@ -1,0 +1,148 @@
+<!--
+ * @Author: 杨仕明 shiming.y@qq.com
+ * @Date: 2024-05-25 19:28:14
+ * @LastEditors: 杨仕明 shiming.y@qq.com
+ * @LastEditTime: 2024-05-25 23:02:41
+ * @FilePath: /wecom_worktool_backend/public/logs.html
+ * @Description: 
+ * 
+ * Copyright (c) 2024 by ${git_name_email}, All Rights Reserved. 
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Viewer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        #logContent {
+            white-space: pre-wrap;
+            background-color: #fafafa;
+            padding: 20px;
+            border-radius: 8px;
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .refresh-container {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .refresh-container label {
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        .refresh-container select {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Log Viewer</h1>
+        <div id="logContent"></div>
+        <div class="button-container">
+            <button onclick="fetchLogs()">刷新</button>
+            <button onclick="history.back()">返回</button>
+        </div>
+        <div class="refresh-container">
+            <label for="refreshRate">刷新频率：</label>
+            <select id="refreshRate" onchange="setRefreshRate()">
+                <option value="2000">2秒</option>
+                <option value="5000" selected>5秒</option>
+                <option value="10000">10秒</option>
+                <option value="30000">30秒</option>
+                <option value="60000">1分钟</option>
+            </select>
+        </div>
+    </div>
+
+    <script>
+        const logContentDiv = document.getElementById('logContent');
+        let refreshInterval = 5000; // 默认刷新间隔为5秒
+        let refreshTimer;
+
+        const fetchLogs = async () => {
+            try {
+                const response = await fetch('/logs_data');
+                const data = await response.text();
+                logContentDiv.textContent = data;
+            } catch (error) {
+                console.error('Error fetching logs:', error);
+            }
+        };
+
+        const setRefreshRate = () => {
+            const refreshRateSelect = document.getElementById('refreshRate');
+            refreshInterval = parseInt(refreshRateSelect.value);
+            clearInterval(refreshTimer);
+            refreshTimer = setInterval(fetchLogs, refreshInterval);
+            fetchLogs(); // 更改刷新频率后立即获取日志内容
+        };
+
+        refreshTimer = setInterval(fetchLogs, refreshInterval); // 每5秒刷新一次日志内容
+        fetchLogs(); // 初次加载时立即获取日志内容
+    </script>
+</body>
+
+</html>

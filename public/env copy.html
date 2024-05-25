@@ -1,0 +1,93 @@
+<!--
+ * @Author: 杨仕明 shiming.y@qq.com
+ * @Date: 2024-05-25 23:09:39
+ * @LastEditors: 杨仕明 shiming.y@qq.com
+ * @LastEditTime: 2024-05-26 00:30:50
+ * @FilePath: /wecom_worktool_backend/public/env.html
+ * @Description: 
+ * 
+ * Copyright (c) 2024 by ${git_name_email}, All Rights Reserved. 
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Environment Variables Manager</title>
+</head>
+
+<body>
+    <h1>Environment Variables Manager</h1>
+    <div>
+        <h2>Set Environment Variable</h2>
+        <input type="text" id="key" placeholder="Key">
+        <input type="text" id="value" placeholder="Value">
+        <button onclick="setEnv()">Set</button>
+    </div>
+    <div>
+        <h2>Delete Environment Variable</h2>
+        <input type="text" id="deleteKey" placeholder="Key">
+        <button onclick="deleteEnv()">Delete</button>
+    </div>
+    <div>
+        <h2>Current Environment Variables</h2>
+        <pre id="envDisplay"></pre>
+        <button onclick="getEnv()">Refresh</button>
+    </div>
+
+    <script>
+        async function setEnv() {
+            const key = document.getElementById('key').value;
+            const value = document.getElementById('value').value;
+
+            if (key && value) {
+                const response = await fetch('/api/env', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ key, value })
+                });
+
+                const result = await response.json();
+                alert(result.message);
+                getEnv();
+            } else {
+                alert('Key and value are required.');
+            }
+        }
+
+        async function deleteEnv() {
+            const key = document.getElementById('deleteKey').value;
+
+            if (key) {
+                const response = await fetch('/api/env', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ key })
+                });
+
+                const result = await response.json();
+                alert(result.message);
+                getEnv();
+            } else {
+                alert('Key is required.');
+            }
+        }
+
+        async function getEnv() {
+            const response = await fetch('/api/env');
+            const env = await response.json();
+            document.getElementById('envDisplay').textContent = JSON.stringify(env, null, 2);
+        }
+
+        // Initialize environment variables display
+        getEnv();
+    </script>
+</body>
+
+</html>
