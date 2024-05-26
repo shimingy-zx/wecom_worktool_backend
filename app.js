@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-24 20:56:55
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-25 23:12:55
+ * @LastEditTime: 2024-05-26 23:45:29
  * @FilePath: /wecom_worktool_backend/app.js
  * @Description:
  *
@@ -10,30 +10,49 @@
  */
 
 require("dotenv").config();
+
+const createError = require("http-errors");
 const express = require("express");
-const app = express();
-const bodyParser = require("body-parser");
+const path = require("path");
 const cookieParser = require("cookie-parser");
-const port = 3000;
-const logger = require("./config/logger"); // 导入logger模块
+const logger = require("morgan");
 
 const indexRouter = require("./routes/index");
-const logsRouter = require("./routes/logs");
 const worktoolRouter = require("./routes/worktool");
 const envRouter = require("./routes/env");
+const logsRouter = require("./routes/logs");
 
-app.use(bodyParser.json()); // 解析 application/json
-app.use(bodyParser.urlencoded({ extended: false }));
+const app = express();
+
+// view engine setup
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "jade");
+
+app.use(logger("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/", logsRouter);
-app.use("/", worktoolRouter);
+app.use("/worktool", worktoolRouter);
 app.use("/", envRouter);
+app.use("/", logsRouter);
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-  logger.info(`Server is running on http://localhost:${port}`);
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  next(createError(404));
+});
+
+// error handler
+app.use(function (err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get("env") === "development" ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render("error");
 });
 
 module.exports = app;

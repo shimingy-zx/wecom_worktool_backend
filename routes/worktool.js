@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:32:18
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-26 08:43:37
+ * @LastEditTime: 2024-05-27 00:02:13
  * @FilePath: /wecom_worktool_backend/routes/worktool.js
  * @Description:
  *
@@ -18,7 +18,8 @@ const {
 } = require("../services/chatService");
 const logger = require("../config/logger"); // 导入logger模块
 
-router.post("/worktool", async (req, res) => {
+/* POST worktool listing. */
+router.post("/", async (req, res) => {
   const {
     spoken,
     receivedName,
@@ -88,7 +89,18 @@ router.post("/worktool", async (req, res) => {
     seconds++;
     console.log(`计时：${seconds} 秒`);
 
-    if (chatMessage !== null) {
+    if (seconds < 6 && chatMessage !== null) {
+      clearInterval(timer);
+      console.log("计时器已停止");
+
+      res.write(` "info": { "text": "${chatMessage}" }`);
+      res.write(" } }");
+      res.end();
+
+      return;
+    }
+
+    if (seconds >= 6 && chatMessage !== null) {
       clearInterval(timer);
       console.log("计时器已停止");
 

@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:33:14
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-26 03:01:33
+ * @LastEditTime: 2024-05-27 00:09:39
  * @FilePath: /wecom_worktool_backend/services/chatService.js
  * @Description:
  *
@@ -46,6 +46,7 @@ async function sendWorktoolMessage(receivedName, chatMessage) {
             type: 203,
             titleList: [receivedName],
             receivedContent: chatMessage,
+            atList: [receivedName],
           },
         ],
       },
