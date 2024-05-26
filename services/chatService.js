@@ -11,6 +11,7 @@
 
 const axios = require("axios");
 
+// 获取AI智能体回复
 async function getChatResponse(spoken) {
   try {
     const response = await axios.post(
@@ -35,6 +36,7 @@ async function getChatResponse(spoken) {
   }
 }
 
+// 向企业微信发送信息
 async function sendWorktoolMessage(receivedName, chatMessage) {
   try {
     await axios.post(
