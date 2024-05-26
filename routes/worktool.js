@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:32:18
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-25 21:17:24
+ * @LastEditTime: 2024-05-26 08:43:37
  * @FilePath: /wecom_worktool_backend/routes/worktool.js
  * @Description:
  *
@@ -17,6 +17,7 @@ const {
   sendWorktoolMessageBasedOnRoomType,
 } = require("../services/chatService");
 const logger = require("../config/logger"); // 导入logger模块
+
 router.post("/worktool", async (req, res) => {
   const {
     spoken,
@@ -39,6 +40,7 @@ router.post("/worktool", async (req, res) => {
   // 打印接收到的数据
   console.log("Received data:", req.body);
 
+  // 信息类型识别，决定是否回复信息
   if ([0, 2, 5, 7, 9].includes(textType)) {
     // 消息类型 0=未知 1=文本 2=图片 5=视频 7=小程序 8=链接 9=文件
     const messageMap = {
