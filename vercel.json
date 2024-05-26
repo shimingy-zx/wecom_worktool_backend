@@ -1,15 +1,21 @@
 {
     "version": 2,
-    "builds": [
-        {
-            "src": "app.js",
-            "use": "@vercel/node"
-        }
-    ],
     "routes": [
         {
-            "src": "/(.*)",
+            "src": "/",
+            "headers": {
+                "cache-control": "no-cache, no-store, must-revalidate",
+                "Access-Control-Allow-Origin": "*"
+            },
             "dest": "/"
+        },
+        {
+            "src": "/env",
+            "headers": {
+                "cache-control": "no-cache, no-store, must-revalidate",
+                "Access-Control-Allow-Origin": "*"
+            },
+            "dest": "/routes/env"
         }
     ]
 }

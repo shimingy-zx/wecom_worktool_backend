@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-24 20:56:55
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-25 23:12:55
+ * @LastEditTime: 2024-05-26 13:27:36
  * @FilePath: /wecom_worktool_backend/app.js
  * @Description:
  *
@@ -14,7 +14,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const port = 3000;
+const port = 3002;
 const logger = require("./config/logger"); // 导入logger模块
 
 const indexRouter = require("./routes/index");

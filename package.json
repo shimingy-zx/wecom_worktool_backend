@@ -1,10 +1,11 @@
 {
   "name": "wecom_worktool_backend",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "dev": "nodemon app.js",
-    "start": "node app.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "build": "echo 'No build necessary for this project'"
   },
   "keywords": [],
   "author": "",
