@@ -28,7 +28,16 @@ npm run start
 
 [Using Express.js with Vercel](https://vercel.com/guides/using-express-with-vercel)
 
-#### docker部署（未配置）
+#### docker部署
+
+git clone https://github.com/shimingy-zx/wecom_worktool_backend.git
+
+在根目录新建.env文件，参考.env.example新建相应的环境变量
+
+docker-compose up -d
+
+or use Docker CLI : docker compose up -d
+
 
 ## todo
 

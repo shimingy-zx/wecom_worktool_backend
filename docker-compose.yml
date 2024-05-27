@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  nodejs:
+    # 指定以当前目录下的Dockerfile文件打包成镜像
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nodejs
+    container_name: nodejs
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
