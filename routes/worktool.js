@@ -30,16 +30,17 @@ router.post("/", async (req, res) => {
     textType,
   } = req.body;
 
+  // 打印接收到的数据
+  console.log("Received data:", req.body);
+
   if (receivedName === "WorkTool" && groupName === "WorkTool") {
+    console.log("该请求为平台回调函数配置校验，不做具体操作！");
     res.send({
       code: 0,
       message: "参数接收成功",
     });
     return;
   }
-
-  // 打印接收到的数据
-  console.log("Received data:", req.body);
 
   // 信息类型识别，决定是否回复信息
   if ([0, 2, 5, 7, 9].includes(textType)) {
