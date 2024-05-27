@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:32:18
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-28 01:52:45
+ * @LastEditTime: 2024-05-28 02:43:20
  * @FilePath: /wecom_worktool_backend/routes/worktool.js
  * @Description:
  *
@@ -11,6 +11,7 @@
 
 const express = require("express");
 const router = express.Router();
+const { executeWithDelay } = require("../services/delay");
 
 const {
   getChatResponse,
@@ -96,14 +97,11 @@ router.post("/", async (req, res) => {
   res.writeHead(200, { "Content-Type": "application/json" });
   res.write('{ "code": 0, "message": "参数接收成功", "data": { "type": 5000,');
 
-  let seconds = 0;
-  const timer = setInterval(() => {
-    seconds++;
-    console.log(`计时：${seconds} 秒`);
+  for (let freq = 0; freq <= 3000; freq++) {
+    console.log(`计时：${freq}*100ms `);
 
     // 当6秒内AI可以正常回复时
-    if (seconds < 6 && chatMessage !== null) {
-      clearInterval(timer);
+    if (freq < 60 && chatMessage !== null) {
       console.log("相应时间小于6秒，计时器已停止！");
 
       res.write(` "info": { "text": "${chatMessage}" }`);
@@ -113,8 +111,7 @@ router.post("/", async (req, res) => {
       return;
     }
 
-    if (seconds >= 6 && chatMessage !== null) {
-      clearInterval(timer);
+    if (freq >= 60 && chatMessage !== null) {
       console.log("计时器已停止");
 
       res.write(` "info": { "text": "${chatMessage}" } } }`);
@@ -131,13 +128,14 @@ router.post("/", async (req, res) => {
     }
 
     // 当AI响应时间大于30秒时，放弃回复信息
-    if (seconds >= 30) {
-      clearInterval(timer);
+    if (freq >= 300) {
       console.log("请求超时");
       res.write(' "info": { "text": "" } } }');
       res.end();
     }
-  }, 1000);
+    // 延迟100ms
+    await executeWithDelay();
+  }
 });
 
 module.exports = router;
