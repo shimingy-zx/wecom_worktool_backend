@@ -1,16 +1,5 @@
-###
- # @Author: 杨仕明 shiming.y@qq.com
- # @Date: 2024-05-26 22:24:01
- # @LastEditors: 杨仕明 shiming.y@qq.com
- # @LastEditTime: 2024-05-26 22:28:02
- # @FilePath: /wecom_worktool_backend/scf_bootstrap
- # @Description: 
- # 
- # Copyright (c) 2024 by ${git_name_email}, All Rights Reserved. 
-### 
+#!/bin/bash
 
-#!/bin/bashexport 
-
-PORT=9000
+export PORT=9000
 
 npm run start
