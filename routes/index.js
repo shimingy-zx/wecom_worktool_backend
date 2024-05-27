@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:28:02
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-26 22:49:52
+ * @LastEditTime: 2024-05-27 17:24:09
  * @FilePath: /wecom_worktool_backend/routes/index.js
  * @Description:
  *
@@ -26,9 +26,8 @@ router.get("/enter-key", (req, res) => {
 });
 
 router.post("/set-key", (req, res) => {
-  const { correctKey } = require("../config/keys");
   const key = req.body.key;
-  if (key === correctKey) {
+  if (key === process.env.VISIT_KEY) {
     res.cookie("key", key);
     res.redirect("/");
   } else {

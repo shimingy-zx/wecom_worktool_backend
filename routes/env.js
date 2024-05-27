@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:31:07
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-26 22:47:51
+ * @LastEditTime: 2024-05-27 17:10:52
  * @FilePath: /wecom_worktool_backend/routes/env.js
  * @Description:
  *
@@ -13,6 +13,7 @@ const express = require("express");
 const router = express.Router();
 const path = require("path");
 const fs = require("fs");
+const dotenv = require("dotenv");
 const checkKey = require("../middlewares/checkKey");
 
 router.get("/env", checkKey, (req, res) => {
@@ -85,6 +86,16 @@ function saveEnv(envVariables) {
     .map(({ key, value }) => `${key}=${value}`)
     .join("\n");
   fs.writeFileSync(".env", envContent);
+  // 重新加载 .env 文件中的环境变量
+  reloadEnv();
+  console.log(process.env.VISIT_KEY);
+}
+
+function reloadEnv() {
+  const envConfig = dotenv.parse(fs.readFileSync(".env"));
+  for (const k in envConfig) {
+    process.env[k] = envConfig[k];
+  }
 }
 
 module.exports = router;
