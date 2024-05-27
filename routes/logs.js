@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:31:07
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-25 23:04:59
+ * @LastEditTime: 2024-05-26 22:47:42
  * @FilePath: /wecom_worktool_backend/routes/logs.js
  * @Description:
  *
@@ -16,7 +16,7 @@ const fs = require("fs"); // 添加这一行
 const checkKey = require("../middlewares/checkKey");
 
 router.get("/logs", checkKey, (req, res) => {
-  res.sendFile(path.join(__dirname, "../public", "logs.html"));
+  res.sendFile(path.join(__dirname, "../public/html", "logs.html"));
 });
 
 router.get("/logs_data", checkKey, (req, res) => {
