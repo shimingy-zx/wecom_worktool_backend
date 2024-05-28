@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:29:02
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-25 21:42:31
+ * @LastEditTime: 2024-05-29 03:31:59
  * @FilePath: /wecom_worktool_backend/config/logger.js
  * @Description:
  *
@@ -24,6 +24,6 @@ const logConfiguration = {
   ),
 };
 
-const logger = winston.createLogger(logConfiguration);
+const log = winston.createLogger(logConfiguration);
 
-module.exports = logger;
+module.exports = log;
