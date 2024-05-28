@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:29:02
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-25 21:42:31
+ * @LastEditTime: 2024-05-28 13:26:26
  * @FilePath: /wecom_worktool_backend/config/logger.js
  * @Description:
  *
@@ -10,11 +10,12 @@
  */
 
 const winston = require("winston");
+const { getlogFilePath } = require("../services/getFilePath");
 
 const logConfiguration = {
   transports: [
     new winston.transports.Console(),
-    new winston.transports.File({ filename: "logs/app.log" }),
+    new winston.transports.File({ filename: `${getlogFilePath()}app.log` }),
   ],
   format: winston.format.combine(
     winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),

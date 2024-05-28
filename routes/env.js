@@ -15,6 +15,7 @@ const path = require("path");
 const fs = require("fs");
 const dotenv = require("dotenv");
 const checkKey = require("../middlewares/checkKey");
+const { getenvFilePath } = require("../services/getFilePath");
 
 router.get("/env", checkKey, (req, res) => {
   res.sendFile(path.join(__dirname, "../public/html", "env.html"));
@@ -69,8 +70,8 @@ router.delete("/api/env", checkKey, (req, res) => {
 
 function loadEnvFile() {
   const envVariables = [];
-  if (fs.existsSync(".env")) {
-    const envFileContent = fs.readFileSync(".env", "utf-8");
+  if (fs.existsSync(getenvFilePath())) {
+    const envFileContent = fs.readFileSync(getenvFilePath(), "utf-8");
     envFileContent.split("\n").forEach((line) => {
       const [key, value] = line.split("=");
       if (key && value) {
@@ -85,14 +86,14 @@ function saveEnv(envVariables) {
   const envContent = envVariables
     .map(({ key, value }) => `${key}=${value}`)
     .join("\n");
-  fs.writeFileSync(".env", envContent);
+  fs.writeFileSync(getenvFilePath(), envContent);
   // 重新加载 .env 文件中的环境变量
   reloadEnv();
   console.log(process.env.VISIT_KEY);
 }
 
 function reloadEnv() {
-  const envConfig = dotenv.parse(fs.readFileSync(".env"));
+  const envConfig = dotenv.parse(fs.readFileSync(getenvFilePath()));
   for (const k in envConfig) {
     process.env[k] = envConfig[k];
   }

@@ -1,4 +1,14 @@
 #!/usr/bin/env node
+/*
+ * @Author: 杨仕明 shiming.y@qq.com
+ * @Date: 2024-05-27 13:52:15
+ * @LastEditors: 杨仕明 shiming.y@qq.com
+ * @LastEditTime: 2024-05-28 13:40:55
+ * @FilePath: /wecom_worktool_backend/bin/www
+ * @Description:
+ *
+ * Copyright (c) 2024 by ${git_name_email}, All Rights Reserved.
+ */
 
 /**
  * Module dependencies.
@@ -8,6 +18,12 @@ var app = require("../app");
 
 var debug = require("debug")("wecom-worktool-backend:server");
 var http = require("http");
+var copyEnvFile = require("../services/copyEnv");
+
+/**
+ * Copy .env file to tmp directory
+ */
+copyEnvFile();
 
 /**
  * Get port from environment and store in Express.
