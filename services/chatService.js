@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:33:14
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-28 22:00:21
+ * @LastEditTime: 2024-05-29 02:08:28
  * @FilePath: /wecom_worktool_backend/services/chatService.js
  * @Description:
  *
@@ -36,8 +36,8 @@ async function getChatResponse(spoken) {
   }
 }
 
-// 向企业微信发送信息
-async function sendWorktoolMessage(receivedName, chatMessage) {
+// 向企业微信内外部群聊发送信息
+async function sendMessageGroup(groupName, receivedName, chatMessage) {
   try {
     await axios.post(
       process.env.WORKTOOL_MES_URL,
@@ -46,9 +46,9 @@ async function sendWorktoolMessage(receivedName, chatMessage) {
         list: [
           {
             type: 203,
-            titleList: [receivedName],
+            titleList: [groupName],
             receivedContent: chatMessage,
-            // atList: [receivedName],
+            atList: [receivedName],
           },
         ],
       },
@@ -63,7 +63,33 @@ async function sendWorktoolMessage(receivedName, chatMessage) {
   }
 }
 
-function sendWorktoolMessageBasedOnRoomType(
+// 向企业微信联系人发送信息
+async function sendMessageUser(receivedName, chatMessage) {
+  try {
+    await axios.post(
+      process.env.WORKTOOL_MES_URL,
+      {
+        socketType: 2,
+        list: [
+          {
+            type: 203,
+            titleList: [receivedName],
+            receivedContent: chatMessage,
+          },
+        ],
+      },
+      {
+        params: { robotId: process.env.WORKTOOL_ROBOT_ID },
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  } catch (error) {
+    console.error("Error processing request:", error);
+    throw error;
+  }
+}
+
+function sendType(
   roomType,
   atMe,
   receivedName,
@@ -72,15 +98,15 @@ function sendWorktoolMessageBasedOnRoomType(
   chatMessage
 ) {
   if (roomType === 1 && atMe === "true") {
-    sendWorktoolMessage(groupName, chatMessage);
+    sendMessageGroup(groupName, receivedName, chatMessage);
   } else if (roomType === 2 || roomType === 4) {
-    sendWorktoolMessage(receivedName, chatMessage);
+    sendMessageUser(receivedName, chatMessage);
   } else if (roomType === 3 && atMe === "true") {
-    sendWorktoolMessage(groupName, chatMessage);
+    sendMessageGroup(groupName, receivedName, chatMessage);
   }
 }
 
 module.exports = {
   getChatResponse,
-  sendWorktoolMessageBasedOnRoomType,
+  sendType,
 };

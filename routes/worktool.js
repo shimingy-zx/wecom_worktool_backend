@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:32:18
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-28 21:46:01
+ * @LastEditTime: 2024-05-29 02:07:46
  * @FilePath: /wecom_worktool_backend/routes/worktool.js
  * @Description:
  *
@@ -14,10 +14,7 @@ const router = express.Router();
 const ProgressBar = require("progress");
 const { executeWithDelay } = require("../services/delay");
 
-const {
-  getChatResponse,
-  sendWorktoolMessageBasedOnRoomType,
-} = require("../services/chatService");
+const { getChatResponse, sendType } = require("../services/chatService");
 const logger = require("../config/logger"); // 导入logger模块
 
 /* POST worktool listing. */
@@ -132,7 +129,7 @@ router.post("/", async (req, res) => {
         message: "参数接收成功",
       });
 
-      sendWorktoolMessageBasedOnRoomType(
+      sendType(
         roomType,
         atMe,
         receivedName,
