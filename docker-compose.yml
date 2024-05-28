@@ -6,12 +6,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: nodejs
-    container_name: nodejs
+    image: wecom_worktool_backend
+    container_name: wecom_worktool_backend
     ports:
       - "3000:3000"
     networks:
       - app-network
+    environment:
+      TZ: ${EN_TZ:-Asia/Shanghai}
 
 networks:
   app-network:

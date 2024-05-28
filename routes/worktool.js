@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:32:18
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-28 02:43:20
+ * @LastEditTime: 2024-05-28 03:21:29
  * @FilePath: /wecom_worktool_backend/routes/worktool.js
  * @Description:
  *
@@ -94,9 +94,6 @@ router.post("/", async (req, res) => {
       console.error("Error processing request:", error);
     });
 
-  res.writeHead(200, { "Content-Type": "application/json" });
-  res.write('{ "code": 0, "message": "参数接收成功", "data": { "type": 5000,');
-
   for (let freq = 0; freq <= 3000; freq++) {
     console.log(`计时：${freq}*100ms `);
 
@@ -104,9 +101,16 @@ router.post("/", async (req, res) => {
     if (freq < 60 && chatMessage !== null) {
       console.log("相应时间小于6秒，计时器已停止！");
 
-      res.write(` "info": { "text": "${chatMessage}" }`);
-      res.write(" } }");
-      res.end();
+      res.send({
+        code: 0,
+        message: "参数接收成功",
+        data: {
+          type: 500,
+          info: {
+            text: chatMessage,
+          },
+        },
+      });
 
       return;
     }
@@ -114,8 +118,10 @@ router.post("/", async (req, res) => {
     if (freq >= 60 && chatMessage !== null) {
       console.log("计时器已停止");
 
-      res.write(` "info": { "text": "${chatMessage}" } } }`);
-      res.end();
+      res.send({
+        code: 0,
+        message: "参数接收成功",
+      });
 
       sendWorktoolMessageBasedOnRoomType(
         roomType,
@@ -129,9 +135,6 @@ router.post("/", async (req, res) => {
 
     // 当AI响应时间大于30秒时，放弃回复信息
     if (freq >= 300) {
-      console.log("请求超时");
-      res.write(' "info": { "text": "" } } }');
-      res.end();
     }
     // 延迟100ms
     await executeWithDelay();

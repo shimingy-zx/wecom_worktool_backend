@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-24 20:56:55
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-26 23:45:29
+ * @LastEditTime: 2024-05-28 12:37:49
  * @FilePath: /wecom_worktool_backend/app.js
  * @Description:
  *
@@ -16,6 +16,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+var favicon = require("serve-favicon");
 
 const indexRouter = require("./routes/index");
 const worktoolRouter = require("./routes/worktool");
@@ -27,6 +28,9 @@ const app = express();
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
+
+// serve-favicon
+app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 
 app.use(logger("dev"));
 app.use(express.json());
