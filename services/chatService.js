@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:33:14
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-29 02:08:28
+ * @LastEditTime: 2024-05-29 06:12:36
  * @FilePath: /wecom_worktool_backend/services/chatService.js
  * @Description:
  *
@@ -10,6 +10,7 @@
  */
 
 const axios = require("axios");
+const log = require("../config/logger"); // 导入logger模块
 
 // 获取COZE_AI智能体回复
 async function getChatResponse(spoken) {
@@ -29,7 +30,23 @@ async function getChatResponse(spoken) {
         },
       }
     );
-    return response.data.messages[0].content;
+
+    // Extract the content of the "answer" message
+    const answerMessage = response.data.messages.find(
+      (message) => message.type === "answer"
+    ).content;
+
+    const followUpMessages = response.data.messages
+      .filter((message) => message.type === "follow_up")
+      .map((message, index) => `${index + 1}、${message.content}`)
+      .join("\n");
+
+    // Format the result
+    const result = `${answerMessage}\n\n猜你想问：\n${followUpMessages}`;
+
+    log.info(`回复的内容：${result}`);
+
+    return result;
   } catch (error) {
     console.error("Error processing request:", error);
     throw error;
