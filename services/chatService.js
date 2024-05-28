@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:33:14
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-29 06:12:36
+ * @LastEditTime: 2024-05-29 06:32:17
  * @FilePath: /wecom_worktool_backend/services/chatService.js
  * @Description:
  *
@@ -42,7 +42,10 @@ async function getChatResponse(spoken) {
       .join("\n");
 
     // Format the result
-    const result = `${answerMessage}\n\n猜你想问：\n${followUpMessages}`;
+    let result = `${answerMessage}`;
+    if (followUpMessages) {
+      result += `\n\n猜你想问：\n${followUpMessages}`;
+    }
 
     log.info(`回复的内容：${result}`);
 
