@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:32:18
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-28 03:21:29
+ * @LastEditTime: 2024-05-28 21:46:01
  * @FilePath: /wecom_worktool_backend/routes/worktool.js
  * @Description:
  *
@@ -11,6 +11,7 @@
 
 const express = require("express");
 const router = express.Router();
+const ProgressBar = require("progress");
 const { executeWithDelay } = require("../services/delay");
 
 const {
@@ -79,7 +80,7 @@ router.post("/", async (req, res) => {
 
   // 判断是否回复
   if (atMe !== "true" && [1, 3].includes(roomType)) {
-    console.log("该信息由内部群发送，而且没有@机器人，不做回复");
+    console.log("该信息由内部群发送，而且没有@机器人，不做回复!");
     return;
   }
 
@@ -94,12 +95,20 @@ router.post("/", async (req, res) => {
       console.error("Error processing request:", error);
     });
 
+  const bar = new ProgressBar(":bar :percent :etas", {
+    total: 300,
+    clear: true,
+  });
+
+  console.log(`响应倒计时30秒！ `);
   for (let freq = 0; freq <= 3000; freq++) {
-    console.log(`计时：${freq}*100ms `);
+    // console.log(`计时：${freq}*100ms `);
+    bar.tick();
+    // bar.complete
 
     // 当6秒内AI可以正常回复时
     if (freq < 60 && chatMessage !== null) {
-      console.log("相应时间小于6秒，计时器已停止！");
+      console.log("相应时间小于6秒，选择直接回复！");
 
       res.send({
         code: 0,
@@ -128,6 +137,7 @@ router.post("/", async (req, res) => {
         atMe,
         receivedName,
         groupRemark,
+        groupName,
         chatMessage
       );
       return;

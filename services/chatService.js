@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:33:14
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-27 00:09:39
+ * @LastEditTime: 2024-05-28 22:00:21
  * @FilePath: /wecom_worktool_backend/services/chatService.js
  * @Description:
  *
@@ -11,7 +11,7 @@
 
 const axios = require("axios");
 
-// 获取AI智能体回复
+// 获取COZE_AI智能体回复
 async function getChatResponse(spoken) {
   try {
     const response = await axios.post(
@@ -48,7 +48,7 @@ async function sendWorktoolMessage(receivedName, chatMessage) {
             type: 203,
             titleList: [receivedName],
             receivedContent: chatMessage,
-            atList: [receivedName],
+            // atList: [receivedName],
           },
         ],
       },
@@ -68,14 +68,15 @@ function sendWorktoolMessageBasedOnRoomType(
   atMe,
   receivedName,
   groupRemark,
+  groupName,
   chatMessage
 ) {
   if (roomType === 1 && atMe === "true") {
-    sendWorktoolMessage(groupRemark, chatMessage);
+    sendWorktoolMessage(groupName, chatMessage);
   } else if (roomType === 2 || roomType === 4) {
     sendWorktoolMessage(receivedName, chatMessage);
   } else if (roomType === 3 && atMe === "true") {
-    sendWorktoolMessage(groupRemark, chatMessage);
+    sendWorktoolMessage(groupName, chatMessage);
   }
 }
 
