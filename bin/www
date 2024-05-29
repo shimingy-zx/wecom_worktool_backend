@@ -8,6 +8,8 @@ var app = require("../app");
 
 var debug = require("debug")("wecom-worktool-backend:server");
 var http = require("http");
+const WebSocket = require("ws");
+const handleWebSocketConnection = require("../services/wsHandler"); // 引入WebSocket处理器
 
 /**
  * Get port from environment and store in Express.
@@ -21,6 +23,12 @@ app.set("port", port);
  */
 
 var server = http.createServer(app);
+
+// 创建一个WebSocket服务器并与HTTP服务器关联
+const wss = new WebSocket.Server({ server });
+
+// 使用引入的处理器处理WebSocket连接
+wss.on("connection", handleWebSocketConnection);
 
 /**
  * Listen on provided port, on all network interfaces.
