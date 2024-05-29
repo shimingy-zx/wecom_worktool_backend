@@ -32,7 +32,7 @@ npm run start
 
 [Using Express.js with Vercel](https://vercel.com/guides/using-express-with-vercel)
 
-#### B zdocker部署
+#### docker部署
 
 git clone https://github.com/shimingy-zx/wecom_worktool_backend.git
 
@@ -44,5 +44,7 @@ or use Docker CLI : docker compose up -d
 
 ## todo
 
-- 修改前端页面，把获取环境变量从.env文件改成从系统获取。
-- 给各运行节点设置日志记录
+- 修改前端页面，把获取环境变量从.env文件改成从系统获取或者添加数据库。
+- 给各运行节点设置日志记录，并保存到数据库中
+- 修改worktool前端开源项目，使其满足该后端直接发起WSS请求进行调用操作企业微信。
+- 修改项目访问方式，从输入key访问改为账号密码登录。
