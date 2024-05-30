@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:28:02
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-27 17:24:09
+ * @LastEditTime: 2024-05-30 15:20:48
  * @FilePath: /wecom_worktool_backend/routes/index.js
  * @Description:
  *
@@ -12,12 +12,12 @@
 const express = require("express");
 const router = express.Router();
 const path = require("path");
-const logger = require("../config/logger");
+const log = require("../services/logger");
 const checkKey = require("../middlewares/checkKey");
 
 /* GET home page. */
 router.get("/", checkKey, (req, res) => {
-  logger.info("Visited Home Page");
+  log.info("Visited Home Page");
   res.sendFile(path.join(__dirname, "../public/html", "index.html"));
 });
 

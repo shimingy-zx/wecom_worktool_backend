@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:32:18
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-29 05:06:19
+ * @LastEditTime: 2024-05-30 15:16:59
  * @FilePath: /wecom_worktool_backend/routes/worktool.js
  * @Description:
  *
@@ -15,7 +15,7 @@ const ProgressBar = require("progress");
 const { executeWithDelay } = require("../services/delay");
 
 const { getChatResponse, sendType } = require("../services/chatService");
-const log = require("../config/logger"); // 导入logger模块
+const log = require("../services/logger"); // 导入logger模块
 const { logUserQuestion } = require("../services/logHelper"); // 导入logHelper模块
 
 /* POST worktool listing. */

@@ -2,8 +2,8 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:29:02
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-29 03:54:02
- * @FilePath: /wecom_worktool_backend/config/logger.js
+ * @LastEditTime: 2024-05-30 15:35:31
+ * @FilePath: /wecom_worktool_backend/services/logger.js
  * @Description:
  *
  * Copyright (c) 2024 by ${git_name_email}, All Rights Reserved.

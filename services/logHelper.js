@@ -2,16 +2,17 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-29 04:01:39
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-29 05:18:56
+ * @LastEditTime: 2024-05-30 15:47:35
  * @FilePath: /wecom_worktool_backend/services/logHelper.js
  * @Description:
  *
  * Copyright (c) 2024 by ${git_name_email}, All Rights Reserved.
  */
 
-const log = require("../config/logger");
+const log = require("./logger");
+const sedWebhook = require("./webhook");
 
-const logUserQuestion = (body) => {
+const logUserQuestion = async (body) => {
   const {
     spoken,
     rawSpoken,
@@ -66,16 +67,17 @@ const logUserQuestion = (body) => {
     }
   };
 
-  const logMessage = `用户<${receivedName}>发起提问：${spoken}，----是否@me：${atMe}，----消息类型：${messageTypeDesc(
+  const logMessage = `提问用户：<${receivedName}>\n问题：${spoken}，\n【是否@：${atMe}，--消息类型：${messageTypeDesc(
     textType
-  )}`;
+  )}】`;
 
   if (groupName === "") {
     log.info(logMessage);
+    sedWebhook(logMessage);
   } else {
-    log.info(
-      `群聊<${groupName}>【备注名：${groupRemark}，群类型：${roomTypeDesc}】的${logMessage}`
-    );
+    const mes = `群聊：<${groupName}>\n【备注名：${groupRemark}，群类型：${roomTypeDesc}】${logMessage}\n`;
+    log.info(mes);
+    sedWebhook(mes);
   }
 };
 

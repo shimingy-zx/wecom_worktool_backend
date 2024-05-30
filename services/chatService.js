@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:33:14
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-30 13:13:24
+ * @LastEditTime: 2024-05-30 15:39:00
  * @FilePath: /wecom_worktool_backend/services/chatService.js
  * @Description:
  *
@@ -10,7 +10,7 @@
  */
 
 const axios = require("axios");
-const log = require("../config/logger"); // 导入logger模块
+const log = require("./logger"); // 导入logger模块
 
 // 获取COZE_AI智能体回复
 async function getChatResponse(spoken) {
@@ -43,11 +43,11 @@ async function getChatResponse(spoken) {
 
     // Format the result
     let result = `${answerMessage}`;
-    if (followUpMessages && process.env.IS_SED_RECOMMEND) {
+    if (followUpMessages && process.env.IS_SED_RECOMMEND === "true") {
       result += `\n\n猜你想问：\n${followUpMessages}`;
     }
 
-    log.info(`回复的内容：${result}`);
+    log.info(`回复内容:\n：${result}`);
 
     return result;
   } catch (error) {
