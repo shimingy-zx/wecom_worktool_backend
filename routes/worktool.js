@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:32:18
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-30 15:16:59
+ * @LastEditTime: 2024-05-30 17:13:01
  * @FilePath: /wecom_worktool_backend/routes/worktool.js
  * @Description:
  *
@@ -37,10 +37,7 @@ router.post("/", async (req, res) => {
   if (receivedName === "WorkTool" && groupName === "WorkTool") {
     log.info("该请求为平台回调函数配置校验，不做具体操作！");
 
-    res.send({
-      code: 0,
-      message: "参数接收成功",
-    });
+    res.send(sendResponse());
     return;
   }
 
@@ -50,11 +47,11 @@ router.post("/", async (req, res) => {
   // 当内外部联系人私聊AI机器人，且信息类型为0, 2, 5, 7, 9时，回复无法处理该信息。
   // 当内外部群聊@AI机器人，且信息类型为0, 2, 5, 7, 9时，回复无法处理该信息。
 
+  const isallowtextType = [0, 2, 5, 7, 9].includes(textType);
+
   if (
-    ([2, 4].includes(roomType) && [0, 2, 5, 7, 9].includes(textType)) ||
-    ([1, 3].includes(roomType) &&
-      atMe == "true" &&
-      [0, 2, 5, 7, 9].includes(textType))
+    ([2, 4].includes(roomType) && isallowtextType) ||
+    ([1, 3].includes(roomType) && atMe == "true" && isallowtextType)
   ) {
     const messageMap = {
       0: "对不起，我无法处理该信息类型",
@@ -66,22 +63,14 @@ router.post("/", async (req, res) => {
 
     log.info(messageMap[textType]);
 
-    res.send({
-      code: 0,
-      message: "参数接收成功",
-      data: {
-        type: 500,
-        info: {
-          text: messageMap[textType],
-        },
-      },
-    });
+    res.send(sendResponse(true, messageMap[textType]));
+
     return;
   }
 
-  // 判断是否回复
+  // 当信息由群聊发送，而且没有@机器人，不做回复!
   if (atMe !== "true" && [1, 3].includes(roomType)) {
-    log.info("该信息由内部群发送，而且没有@机器人，不做回复!");
+    log.info("该信息由内群聊发送，而且没有@机器人，不做回复!");
     return;
   }
 
@@ -96,6 +85,7 @@ router.post("/", async (req, res) => {
       console.error("Error processing request:", error);
     });
 
+  // 设置进度条
   const bar = new ProgressBar(":bar :percent :etas", {
     total: 300,
     clear: true,
@@ -103,36 +93,22 @@ router.post("/", async (req, res) => {
 
   log.info("响应倒计时30秒!");
 
+  // 根据AI接口响应时间分别进行不同的操作
   for (let freq = 0; freq <= 3000; freq++) {
-    // console.log(`计时：${freq}*100ms `);
     bar.tick();
     // bar.complete
 
     // 当6秒内AI可以正常回复时，经过测试worktool在10秒内回复可以正常调用。
     if (freq < 60 && chatMessage !== null) {
-      log.info("响应时间小于6秒，选择直接回复！");
-
-      res.send({
-        code: 0,
-        message: "参数接收成功",
-        data: {
-          type: 500,
-          info: {
-            text: chatMessage,
-          },
-        },
-      });
-
+      log.info("响应时间小于6秒，直接回复！");
+      res.send(sendResponse(true, chatMessage));
       return;
     }
 
     if (freq >= 60 && chatMessage !== null) {
-      log.info("响应时间大于6秒，选择调用接口回复！");
+      log.info("响应时间大于6秒，调用接口回复！");
 
-      res.send({
-        code: 0,
-        message: "参数接收成功",
-      });
+      res.send(sendResponse());
 
       sendType(
         roomType,
@@ -149,6 +125,7 @@ router.post("/", async (req, res) => {
     // 当AI响应时间大于30秒时，放弃回复信息
     if (freq >= 300) {
       log.info("响应时间大于30秒，回复超时！");
+      res.send(sendResponse());
 
       sendType(
         roomType,
@@ -164,5 +141,29 @@ router.post("/", async (req, res) => {
     await executeWithDelay();
   }
 });
+
+/**
+ * 发送响应的函数
+ * @param {string} chatMessage - 要发送的消息
+ */
+function sendResponse(isdata = false, chatMessage) {
+  if (isdata) {
+    return {
+      code: 0,
+      message: "参数接收成功",
+      data: {
+        type: 500,
+        info: {
+          text: chatMessage,
+        },
+      },
+    };
+  } else {
+    return {
+      code: 0,
+      message: "参数接收成功",
+    };
+  }
+}
 
 module.exports = router;
