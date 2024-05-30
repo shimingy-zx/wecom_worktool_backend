@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:33:14
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-29 06:32:17
+ * @LastEditTime: 2024-05-30 13:13:24
  * @FilePath: /wecom_worktool_backend/services/chatService.js
  * @Description:
  *
@@ -43,7 +43,7 @@ async function getChatResponse(spoken) {
 
     // Format the result
     let result = `${answerMessage}`;
-    if (followUpMessages) {
+    if (followUpMessages && process.env.IS_SED_RECOMMEND) {
       result += `\n\n猜你想问：\n${followUpMessages}`;
     }
 

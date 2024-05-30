@@ -48,3 +48,4 @@ or use Docker CLI : docker compose up -d
 - 给各运行节点设置日志记录，并保存到数据库中
 - 修改worktool前端开源项目，使其满足该后端直接发起WSS请求进行调用操作企业微信。
 - 修改项目访问方式，从输入key访问改为账号密码登录。
+
