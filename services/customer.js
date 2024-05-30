@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-30 17:34:21
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-30 18:11:56
+ * @LastEditTime: 2024-05-30 18:29:13
  * @FilePath: /wecom_worktool_backend/services/customer.js
  * @Description:
  *
@@ -37,9 +37,9 @@ function customer(mes) {
 }
 
 function iscustomer(mes) {
-  const mesInclude = ["人工"];
+  const keyword = ["人工"];
 
-  if (mesInclude.includes(mes)) {
+  if (mes.includes(keyword)) {
     return true;
   } else {
     return false;
