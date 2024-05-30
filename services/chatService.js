@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:33:14
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-30 15:39:00
+ * @LastEditTime: 2024-05-30 18:12:34
  * @FilePath: /wecom_worktool_backend/services/chatService.js
  * @Description:
  *
@@ -57,7 +57,7 @@ async function getChatResponse(spoken) {
 }
 
 // 向企业微信内外部群聊发送信息
-async function sendMessageGroup(groupName, receivedName, chatMessage) {
+async function sendMessageGroup(titleList, atList, chatMessage) {
   try {
     await axios.post(
       process.env.WORKTOOL_MES_URL,
@@ -66,9 +66,9 @@ async function sendMessageGroup(groupName, receivedName, chatMessage) {
         list: [
           {
             type: 203,
-            titleList: [groupName],
+            titleList: [titleList],
             receivedContent: chatMessage,
-            atList: [receivedName],
+            atList: [atList],
           },
         ],
       },
@@ -84,7 +84,7 @@ async function sendMessageGroup(groupName, receivedName, chatMessage) {
 }
 
 // 向企业微信联系人发送信息
-async function sendMessageUser(receivedName, chatMessage) {
+async function sendMessageUser(titleList, chatMessage) {
   try {
     await axios.post(
       process.env.WORKTOOL_MES_URL,
@@ -93,8 +93,37 @@ async function sendMessageUser(receivedName, chatMessage) {
         list: [
           {
             type: 203,
-            titleList: [receivedName],
+            titleList: [titleList],
             receivedContent: chatMessage,
+          },
+        ],
+      },
+      {
+        params: { robotId: process.env.WORKTOOL_ROBOT_ID },
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  } catch (error) {
+    console.error("Error processing request:", error);
+    throw error;
+  }
+}
+
+// 向企业微信发送文件
+async function sendfile(titleList, fileUrl, fileType, extraText, objectName) {
+  try {
+    await axios.post(
+      process.env.WORKTOOL_MES_URL,
+      {
+        socketType: 2,
+        list: [
+          {
+            type: 218,
+            objectName,
+            titleList: [titleList],
+            fileUrl,
+            fileType,
+            extraText,
           },
         ],
       },
@@ -129,4 +158,5 @@ function sendType(
 module.exports = {
   getChatResponse,
   sendType,
+  sendfile,
 };

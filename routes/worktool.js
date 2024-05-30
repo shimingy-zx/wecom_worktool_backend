@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-25 20:32:18
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-30 17:13:01
+ * @LastEditTime: 2024-05-30 18:09:20
  * @FilePath: /wecom_worktool_backend/routes/worktool.js
  * @Description:
  *
@@ -17,6 +17,7 @@ const { executeWithDelay } = require("../services/delay");
 const { getChatResponse, sendType } = require("../services/chatService");
 const log = require("../services/logger"); // 导入logger模块
 const { logUserQuestion } = require("../services/logHelper"); // 导入logHelper模块
+const { iscustomer, customer } = require("../services/customer"); // 导入logHelper模块
 
 /* POST worktool listing. */
 router.post("/", async (req, res) => {
@@ -71,6 +72,13 @@ router.post("/", async (req, res) => {
   // 当信息由群聊发送，而且没有@机器人，不做回复!
   if (atMe !== "true" && [1, 3].includes(roomType)) {
     log.info("该信息由内群聊发送，而且没有@机器人，不做回复!");
+    return;
+  }
+
+  // 判断是否回复人工处理信息
+  if (iscustomer(spoken)) {
+    res.send(sendResponse());
+    await customer(req.body);
     return;
   }
 
