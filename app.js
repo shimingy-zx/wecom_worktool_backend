@@ -2,7 +2,7 @@
  * @Author: 杨仕明 shiming.y@qq.com
  * @Date: 2024-05-24 20:56:55
  * @LastEditors: 杨仕明 shiming.y@qq.com
- * @LastEditTime: 2024-05-28 12:37:49
+ * @LastEditTime: 2024-05-31 03:14:00
  * @FilePath: /wecom_worktool_backend/app.js
  * @Description:
  *
@@ -22,6 +22,7 @@ const indexRouter = require("./routes/index");
 const worktoolRouter = require("./routes/worktool");
 const envRouter = require("./routes/env");
 const logsRouter = require("./routes/logs");
+const tworktoolAppRouter = require("./routes/worktoolApp");
 
 const app = express();
 
@@ -42,6 +43,7 @@ app.use("/", indexRouter);
 app.use("/worktool", worktoolRouter);
 app.use("/", envRouter);
 app.use("/", logsRouter);
+app.use("/", tworktoolAppRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

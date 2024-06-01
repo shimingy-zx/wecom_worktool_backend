@@ -25,7 +25,7 @@ app.set("port", port);
 var server = http.createServer(app);
 
 // 创建一个WebSocket服务器并与HTTP服务器关联
-const wss = new WebSocket.Server({ server });
+const wss = new WebSocket.Server({ server, path: "/webserver/wework/12" });
 
 // 使用引入的处理器处理WebSocket连接
 wss.on("connection", handleWebSocketConnection);
